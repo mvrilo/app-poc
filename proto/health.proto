@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package health;
+
+option go_package = ".;proto";
+
+import "google/protobuf/empty.proto";
+
+message Health {
+  bool alive = 1;
+}
+
+service HealthService {
+  rpc Check (google.protobuf.Empty) returns (Health);
+}

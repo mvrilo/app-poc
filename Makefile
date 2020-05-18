@@ -7,11 +7,14 @@ export GRPC_ADDRESS DATABASE_URI DATABASE_ADAPTER
 
 storepoc: build
 
+cli.health:
+	grpcurl -plaintext -d '{}' $(GRPC_ADDRESS) health.HealthService.Check
+
 cli.echo:
 	grpcurl -plaintext $(GRPC_ADDRESS) store.StoreService.Echo
 
 cli.list:
-	grpcurl -plaintext $(GRPC_ADDRESS) store.StoreService.List
+	grpcurl -plaintext $(GRPC_ADDRESS) list
 
 cli.create:
 	grpcurl -plaintext -d '{ "name": "test", "uri": "https://urisample.com" }' $(GRPC_ADDRESS) store.StoreService.Create
@@ -33,7 +36,7 @@ proto:
 	protoc \
 		-I=$(PROTO_DIR) \
 		--go_out=plugins=grpc:$(PROTO_DIR) \
-		$(PROTO_DIR)/store.proto
+		$(PROTO_DIR)/*.proto
 
 build: proto
 	go build -o storepoc cmd/storepoc/main.go

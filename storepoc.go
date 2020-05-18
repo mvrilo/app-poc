@@ -7,6 +7,7 @@ import (
 	"github.com/mvrilo/storepoc/pkg/database"
 	"github.com/mvrilo/storepoc/pkg/grpc"
 
+	"github.com/mvrilo/storepoc/core/health"
 	"github.com/mvrilo/storepoc/core/store"
 
 	"github.com/mvrilo/storepoc/proto"
@@ -24,12 +25,12 @@ func New() (*Storepoc, error) {
 		return nil, err
 	}
 
-	grpcServer, err := grpc.NewServer(config.GrpcAddress())
+	grpcServer, err := grpc.NewServer()
 	if err != nil {
 		return nil, err
 	}
 
-	grpcClient, err := grpc.NewClient(config.GrpcAddress())
+	grpcClient, err := grpc.NewClient()
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +46,7 @@ func New() (*Storepoc, error) {
 }
 
 func (s *Storepoc) Router() {
+	health.Register(s.Database, s.GrpcServer, s.GrpcClient)
 	store.Register(s.Database, s.GrpcServer, s.GrpcClient)
 }
 
