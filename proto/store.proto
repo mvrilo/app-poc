@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package store;
+
+option go_package = ".;proto";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+enum Status {
+  ACTIVE = 0;
+  INACTIVE = 1;
+}
+
+message Store {
+  string id = 1;
+  string name = 2;
+  string uri = 3;
+  Status status = 4;
+  google.protobuf.Timestamp created = 5;
+  google.protobuf.Timestamp updated = 6;
+}
+
+message Stores {
+  repeated Store stores = 1;
+}
+
+message FindRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message CreateRequest {
+  string name = 1;
+  string uri = 2;
+}
+
+message ChangeStatusRequest {
+  string id = 1;
+  Status status = 2;
+}
+
+message ListRequest {
+  string name = 1;
+  Status status = 2;
+}
+
+message EchoResponse {
+  string echo = 1;
+}
+
+service StoreService {
+  rpc Find (FindRequest) returns (Store);
+  rpc List (ListRequest) returns (Stores);
+  rpc Create (CreateRequest) returns (Store);
+  rpc ChangeStatus (ChangeStatusRequest) returns (Store);
+  rpc Echo (google.protobuf.Empty) returns (EchoResponse);
+}
