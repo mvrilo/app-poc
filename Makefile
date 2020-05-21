@@ -8,7 +8,7 @@ export GRPC_ADDRESS DATABASE_URI DATABASE_ADAPTER
 storepoc: build
 
 clean:
-	rm -rf swagger/* proto/**/*.go 2>/dev/null
+	rm -rf docs proto/**/*.go 2>/dev/null
 
 cli.health:
 	grpcurl -plaintext $(GRPC_ADDRESS) health.HealthService.Check
@@ -40,7 +40,7 @@ deps:
 			github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc \
 	)
 
-build: proto
+build: proto docs
 	go build -o storepoc cmd/storepoc/main.go
 
 test: proto
@@ -49,6 +49,26 @@ test: proto
 run: proto
 	go run cmd/storepoc/main.go
 
+docs: prepare-docs docs-md docs-html
+
+prepare-docs:
+	rm -rf docs 2>/dev/null; \
+		mkdir docs
+
+docs-md:
+	protoc \
+		-I=$(PROTO_DIR)/v1 \
+		--doc_out=./docs \
+		--doc_opt=html,index.html \
+		$(PROTO_DIR)/v1/*.proto
+
+docs-html:
+	protoc \
+		-I=$(PROTO_DIR)/v1 \
+		--doc_out=./docs \
+		--doc_opt=markdown,readme.md \
+		$(PROTO_DIR)/v1/*.proto
+
 .PHONY: proto
 proto: proto-v1
 
@@ -56,8 +76,6 @@ proto-gen-v1:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
 		--go_out=plugins=grpc:$(PROTO_DIR)/v1 \
-		--doc_out=./doc \
-		--doc_opt=html,index.html \
 		$(PROTO_DIR)/v1/*.proto
 
 proto-v1: proto-gen-v1
