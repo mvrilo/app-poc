@@ -3,7 +3,7 @@ package store
 import (
 	"github.com/mvrilo/storepoc/pkg/database"
 	"github.com/mvrilo/storepoc/pkg/grpc"
-	"github.com/mvrilo/storepoc/proto"
+	"github.com/mvrilo/storepoc/proto/v1"
 )
 
 type Store struct {

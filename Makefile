@@ -1,14 +1,17 @@
 PROTO_DIR := proto
 GRPC_ADDRESS := 127.0.0.1:7000
-DATABASE_URI := db.sqlite
+DATABASE_URI := tmp/db.sqlite
 DATABASE_ADAPTER := sqlite3
 
 export GRPC_ADDRESS DATABASE_URI DATABASE_ADAPTER
 
 storepoc: build
 
+clean:
+	rm -rf swagger/* proto/**/*.go 2>/dev/null
+
 cli.health:
-	grpcurl -plaintext -d '{}' $(GRPC_ADDRESS) health.HealthService.Check
+	grpcurl -plaintext $(GRPC_ADDRESS) health.HealthService.Check
 
 cli.echo:
 	grpcurl -plaintext $(GRPC_ADDRESS) store.StoreService.Echo
@@ -16,8 +19,11 @@ cli.echo:
 cli.list:
 	grpcurl -plaintext $(GRPC_ADDRESS) list
 
+cli.find:
+	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.StoreService.Create
+
 cli.create:
-	grpcurl -plaintext -d '{ "name": "test", "uri": "https://urisample.com" }' $(GRPC_ADDRESS) store.StoreService.Create
+	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.StoreService.Create
 
 sqlite:
 	sqlite3 $(DATABASE_URI) -header -column -echo 'select * from stores;'
@@ -27,16 +33,12 @@ bench:
 
 deps:
 	( cd /tmp; \
-		go get -u github.com/golang/protobuf/protoc-gen-go; \
-		go get -u google.golang.org/grpc; \
+		go get \
+			github.com/golang/protobuf/protoc-gen-go \
+			google.golang.org/grpc \
+			github.com/favadi/protoc-go-inject-tag \
+			github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc \
 	)
-
-.PHONY: proto
-proto:
-	protoc \
-		-I=$(PROTO_DIR) \
-		--go_out=plugins=grpc:$(PROTO_DIR) \
-		$(PROTO_DIR)/*.proto
 
 build: proto
 	go build -o storepoc cmd/storepoc/main.go
@@ -46,3 +48,19 @@ test: proto
 
 run: proto
 	go run cmd/storepoc/main.go
+
+.PHONY: proto
+proto: proto-v1
+
+proto-gen-v1:
+	protoc \
+		-I=$(PROTO_DIR)/v1 \
+		--go_out=plugins=grpc:$(PROTO_DIR)/v1 \
+		--doc_out=./doc \
+		--doc_opt=html,index.html \
+		$(PROTO_DIR)/v1/*.proto
+
+proto-v1: proto-gen-v1
+	for file in proto/v1/*.pb.go; do \
+		protoc-go-inject-tag -input=$$file; \
+	done

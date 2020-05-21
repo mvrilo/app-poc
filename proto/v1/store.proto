@@ -5,7 +5,6 @@ package store;
 option go_package = ".;proto";
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
 
 enum Status {
   ACTIVE = 0;
@@ -13,6 +12,7 @@ enum Status {
 }
 
 message Store {
+  // @exclude @inject_tag: gorm:"type:uuid;primary_key"
   string id = 1;
   string name = 2;
   string uri = 3;
@@ -31,28 +31,29 @@ message FindRequest {
 }
 
 message CreateRequest {
+  // @exclude @inject_tag: validate:"required"
   string name = 1;
+  // @exclude @inject_tag: validate:"required,uri"
   string uri = 2;
 }
 
 message ChangeStatusRequest {
+  // @exclude @inject_tag: validate:"required,uuid"
   string id = 1;
+  // @exclude @inject_tag: validate:"required"
   Status status = 2;
 }
 
 message ListRequest {
+  // @exclude @inject_tag: validate:"required"
   string name = 1;
+  // @exclude @inject_tag: validate:"required"
   Status status = 2;
 }
 
-message EchoResponse {
-  string echo = 1;
-}
-
 service StoreService {
-  rpc Find (FindRequest) returns (Store);
-  rpc List (ListRequest) returns (Stores);
-  rpc Create (CreateRequest) returns (Store);
-  rpc ChangeStatus (ChangeStatusRequest) returns (Store);
-  rpc Echo (google.protobuf.Empty) returns (EchoResponse);
+  rpc Find (FindRequest) returns (Store) {};
+  rpc List (ListRequest) returns (Stores) {};
+  rpc Create (CreateRequest) returns (Store) {};
+  rpc ChangeStatus (ChangeStatusRequest) returns (Store) {};
 }

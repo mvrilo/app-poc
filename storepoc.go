@@ -10,7 +10,7 @@ import (
 	"github.com/mvrilo/storepoc/core/health"
 	"github.com/mvrilo/storepoc/core/store"
 
-	"github.com/mvrilo/storepoc/proto"
+	"github.com/mvrilo/storepoc/proto/v1"
 )
 
 type Storepoc struct {

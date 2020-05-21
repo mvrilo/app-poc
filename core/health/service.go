@@ -3,7 +3,7 @@ package health
 import (
 	"context"
 
-	"github.com/mvrilo/storepoc/proto"
+	"github.com/mvrilo/storepoc/proto/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

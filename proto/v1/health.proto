@@ -11,5 +11,5 @@ message Health {
 }
 
 service HealthService {
-  rpc Check (google.protobuf.Empty) returns (Health);
+  rpc Check (google.protobuf.Empty) returns (Health) {};
 }

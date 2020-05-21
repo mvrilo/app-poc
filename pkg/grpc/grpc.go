@@ -18,6 +18,7 @@ import (
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 )
 
 type ClientConnInterface = grpc.ClientConnInterface
@@ -65,20 +66,20 @@ func NewServer() (*Server, error) {
 
 	grpcServer := grpc.NewServer(
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+			grpc_recovery.StreamServerInterceptor(recoveryOpts...),
 			grpc_zap.StreamServerInterceptor(logger.Logger, zapOpts...),
-			// 	grpc_ctxtags.StreamServerInterceptor(),
+			grpc_ctxtags.StreamServerInterceptor(),
 			// 	grpc_opentracing.StreamServerInterceptor(),
 			// 	grpc_prometheus.StreamServerInterceptor,
 			// 	grpc_auth.StreamServerInterceptor(myAuthFunction),
-			grpc_recovery.StreamServerInterceptor(recoveryOpts...),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_recovery.UnaryServerInterceptor(recoveryOpts...),
 			grpc_zap.UnaryServerInterceptor(logger.Logger, zapOpts...),
-			// 	grpc_ctxtags.UnaryServerInterceptor(),
+			grpc_ctxtags.UnaryServerInterceptor(),
 			// 	grpc_opentracing.UnaryServerInterceptor(),
 			// 	grpc_prometheus.UnaryServerInterceptor,
 			// 	grpc_auth.UnaryServerInterceptor(myAuthFunction),
-			grpc_recovery.UnaryServerInterceptor(recoveryOpts...),
 		)),
 	)
 
