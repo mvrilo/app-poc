@@ -7,23 +7,26 @@ export GRPC_ADDRESS DATABASE_URI DATABASE_ADAPTER
 
 storepoc: build
 
+build-run: storepoc
+	./storepoc
+
 clean:
 	rm -rf docs proto/**/*.go 2>/dev/null
 
 cli.health:
-	grpcurl -plaintext $(GRPC_ADDRESS) health.HealthService.Check
+	grpcurl -plaintext $(GRPC_ADDRESS) health.v1.HealthService.Check
 
 cli.echo:
-	grpcurl -plaintext $(GRPC_ADDRESS) store.StoreService.Echo
+	grpcurl -plaintext $(GRPC_ADDRESS) store.v1.StoreService.Echo
 
 cli.list:
 	grpcurl -plaintext $(GRPC_ADDRESS) list
 
 cli.find:
-	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.StoreService.Create
+	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
 
 cli.create:
-	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.StoreService.Create
+	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
 
 sqlite:
 	sqlite3 $(DATABASE_URI) -header -column -echo 'select * from stores;'
@@ -38,10 +41,11 @@ deps:
 			google.golang.org/grpc \
 			github.com/favadi/protoc-go-inject-tag \
 			github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc \
+			github.com/ahmetb/govvv \
 	)
 
 build: proto docs
-	go build -o storepoc cmd/storepoc/main.go
+	govvv build -o storepoc cmd/storepoc/main.go
 
 test: proto
 	go test core/**/*

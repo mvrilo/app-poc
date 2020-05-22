@@ -4,21 +4,21 @@
 ## Table of Contents
 
 - [Health.proto](#Health.proto)
-    - [Health](#health.Health)
+    - [Health](#health.v1.Health)
   
-    - [HealthService](#health.HealthService)
+    - [HealthService](#health.v1.HealthService)
   
 - [Store.proto](#Store.proto)
-    - [ChangeStatusRequest](#store.ChangeStatusRequest)
-    - [CreateRequest](#store.CreateRequest)
-    - [FindRequest](#store.FindRequest)
-    - [ListRequest](#store.ListRequest)
-    - [Store](#store.Store)
-    - [Stores](#store.Stores)
+    - [ChangeStatusRequest](#store.v1.ChangeStatusRequest)
+    - [CreateRequest](#store.v1.CreateRequest)
+    - [FindRequest](#store.v1.FindRequest)
+    - [ListRequest](#store.v1.ListRequest)
+    - [Store](#store.v1.Store)
+    - [Stores](#store.v1.Stores)
   
-    - [Status](#store.Status)
+    - [Status](#store.v1.Status)
   
-    - [StoreService](#store.StoreService)
+    - [StoreService](#store.v1.StoreService)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -31,7 +31,7 @@
 
 
 
-<a name="health.Health"></a>
+<a name="health.v1.Health"></a>
 
 ### Health
 
@@ -52,14 +52,14 @@
  
 
 
-<a name="health.HealthService"></a>
+<a name="health.v1.HealthService"></a>
 
 ### HealthService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| Check | [.google.protobuf.Empty](#google.protobuf.Empty) | [Health](#health.Health) |  |
+| Check | [.google.protobuf.Empty](#google.protobuf.Empty) | [Health](#health.v1.Health) |  |
 
  
 
@@ -72,7 +72,7 @@
 
 
 
-<a name="store.ChangeStatusRequest"></a>
+<a name="store.v1.ChangeStatusRequest"></a>
 
 ### ChangeStatusRequest
 
@@ -81,14 +81,14 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  |  |
-| status | [Status](#store.Status) |  |  |
+| status | [Status](#store.v1.Status) |  |  |
 
 
 
 
 
 
-<a name="store.CreateRequest"></a>
+<a name="store.v1.CreateRequest"></a>
 
 ### CreateRequest
 
@@ -104,7 +104,7 @@
 
 
 
-<a name="store.FindRequest"></a>
+<a name="store.v1.FindRequest"></a>
 
 ### FindRequest
 
@@ -120,7 +120,7 @@
 
 
 
-<a name="store.ListRequest"></a>
+<a name="store.v1.ListRequest"></a>
 
 ### ListRequest
 
@@ -129,14 +129,14 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  |  |
-| status | [Status](#store.Status) |  |  |
+| status | [Status](#store.v1.Status) |  |  |
 
 
 
 
 
 
-<a name="store.Store"></a>
+<a name="store.v1.Store"></a>
 
 ### Store
 
@@ -147,7 +147,7 @@
 | id | [string](#string) |  |  |
 | name | [string](#string) |  |  |
 | uri | [string](#string) |  |  |
-| status | [Status](#store.Status) |  |  |
+| status | [Status](#store.v1.Status) |  |  |
 | created | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
 | updated | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
 
@@ -156,7 +156,7 @@
 
 
 
-<a name="store.Stores"></a>
+<a name="store.v1.Stores"></a>
 
 ### Stores
 
@@ -164,7 +164,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| stores | [Store](#store.Store) | repeated |  |
+| stores | [Store](#store.v1.Store) | repeated |  |
 
 
 
@@ -173,7 +173,7 @@
  
 
 
-<a name="store.Status"></a>
+<a name="store.v1.Status"></a>
 
 ### Status
 
@@ -189,17 +189,17 @@
  
 
 
-<a name="store.StoreService"></a>
+<a name="store.v1.StoreService"></a>
 
 ### StoreService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| Find | [FindRequest](#store.FindRequest) | [Store](#store.Store) |  |
-| List | [ListRequest](#store.ListRequest) | [Stores](#store.Stores) |  |
-| Create | [CreateRequest](#store.CreateRequest) | [Store](#store.Store) |  |
-| ChangeStatus | [ChangeStatusRequest](#store.ChangeStatusRequest) | [Store](#store.Store) |  |
+| Find | [FindRequest](#store.v1.FindRequest) | [Store](#store.v1.Store) |  |
+| List | [ListRequest](#store.v1.ListRequest) | [Stores](#store.v1.Stores) |  |
+| Create | [CreateRequest](#store.v1.CreateRequest) | [Store](#store.v1.Store) |  |
+| ChangeStatus | [ChangeStatusRequest](#store.v1.ChangeStatusRequest) | [Store](#store.v1.Store) |  |
 
  
 
