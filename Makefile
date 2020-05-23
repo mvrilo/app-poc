@@ -1,9 +1,10 @@
 PROTO_DIR := proto
 GRPC_ADDRESS := 127.0.0.1:7000
+HTTP_ADDRESS := 127.0.0.1:8000
 DATABASE_URI := tmp/db.sqlite
 DATABASE_ADAPTER := sqlite3
 
-export GRPC_ADDRESS DATABASE_URI DATABASE_ADAPTER
+export GRPC_ADDRESS HTTP_ADDRESS DATABASE_URI DATABASE_ADAPTER
 
 storepoc: build
 
@@ -40,6 +41,8 @@ deps:
 			github.com/golang/protobuf/protoc-gen-go \
 			google.golang.org/grpc \
 			github.com/favadi/protoc-go-inject-tag \
+			github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
+			github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
 			github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc \
 			github.com/ahmetb/govvv \
 	)
@@ -79,7 +82,10 @@ proto: proto-v1
 proto-gen-v1:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
+		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--go_out=plugins=grpc:$(PROTO_DIR)/v1 \
+		--grpc-gateway_out=logtostderr=true:$(PROTO_DIR)/v1 \
+		--swagger_out=logtostderr=true:docs \
 		$(PROTO_DIR)/v1/*.proto
 
 proto-v1: proto-gen-v1

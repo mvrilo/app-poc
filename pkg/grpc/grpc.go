@@ -19,11 +19,13 @@ import (
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 )
 
 type ClientConnInterface = grpc.ClientConnInterface
 
 type Server struct {
+	GatewayMux *runtime.ServeMux
 	net.Listener
 	*grpc.Server
 }
@@ -67,7 +69,7 @@ func NewServer() (*Server, error) {
 	grpcServer := grpc.NewServer(
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_recovery.StreamServerInterceptor(recoveryOpts...),
-			grpc_zap.StreamServerInterceptor(logger.Logger, zapOpts...),
+			// grpc_zap.StreamServerInterceptor(logger.Logger, zapOpts...),
 			grpc_ctxtags.StreamServerInterceptor(),
 			// 	grpc_opentracing.StreamServerInterceptor(),
 			// 	grpc_prometheus.StreamServerInterceptor,
@@ -84,11 +86,20 @@ func NewServer() (*Server, error) {
 	)
 
 	reflection.Register(grpcServer)
-
+	mux := runtime.NewServeMux()
 	return &Server{
-		Listener: listener,
-		Server:   grpcServer,
+		GatewayMux: mux,
+		Listener:   listener,
+		Server:     grpcServer,
 	}, nil
+}
+
+func (s *Server) GatewayOpts() []grpc.DialOption {
+	return []grpc.DialOption{grpc.WithInsecure()}
+}
+
+func (s *Server) GatewayAddr() string {
+	return config.GrpcAddress()
 }
 
 func (s *Server) Start() error {

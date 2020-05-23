@@ -5,6 +5,7 @@ package store.v1;
 option go_package = ".;proto";
 
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
 
 enum Status {
   ACTIVE = 0;
@@ -52,8 +53,29 @@ message ListRequest {
 }
 
 service StoreService {
-  rpc Find (FindRequest) returns (Store) {};
-  rpc List (ListRequest) returns (Stores) {};
-  rpc Create (CreateRequest) returns (Store) {};
-  rpc ChangeStatus (ChangeStatusRequest) returns (Store) {};
+  rpc Find (FindRequest) returns (Store) {
+    option (google.api.http) = {
+      get: "/v1/stores/{id}"
+    };
+  };
+
+  rpc List (ListRequest) returns (Stores) {
+    option (google.api.http) = {
+      get: "/v1/stores"
+    };
+  };
+
+  rpc Create (CreateRequest) returns (Store) {
+    option (google.api.http) = {
+      post: "/v1/stores"
+      body: "*"
+    };
+  };
+
+  rpc ChangeStatus (ChangeStatusRequest) returns (Store) {
+    option (google.api.http) = {
+      put: "/v1/stores/{id}"
+      body: "*"
+    };
+  };
 }

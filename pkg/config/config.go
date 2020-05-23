@@ -13,3 +13,7 @@ func DatabaseURI() string {
 func GrpcAddress() string {
 	return os.Getenv("GRPC_ADDRESS")
 }
+
+func HttpAddress() string {
+	return os.Getenv("HTTP_ADDRESS")
+}

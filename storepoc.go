@@ -1,11 +1,13 @@
 package storepoc
 
 import (
+	"context"
 	"log"
 
 	"github.com/mvrilo/storepoc/pkg/config"
 	"github.com/mvrilo/storepoc/pkg/database"
 	"github.com/mvrilo/storepoc/pkg/grpc"
+	"github.com/mvrilo/storepoc/pkg/http"
 
 	"github.com/mvrilo/storepoc/core/health"
 	"github.com/mvrilo/storepoc/core/store"
@@ -15,17 +17,18 @@ import (
 
 type Storepoc struct {
 	*database.Database
+
+	HttpServer *http.Server
 	GrpcServer *grpc.Server
 	GrpcClient *grpc.Client
+
+	Ctx context.Context
+
+	quit chan struct{}
 }
 
 func New() (*Storepoc, error) {
 	db, err := database.New()
-	if err != nil {
-		return nil, err
-	}
-
-	grpcServer, err := grpc.NewServer()
 	if err != nil {
 		return nil, err
 	}
@@ -35,19 +38,36 @@ func New() (*Storepoc, error) {
 		return nil, err
 	}
 
-	s := &Storepoc{
-		Database:   db,
-		GrpcServer: grpcServer,
-		GrpcClient: grpcClient,
+	grpcServer, err := grpc.NewServer()
+	if err != nil {
+		return nil, err
 	}
 
-	s.Router()
+	httpServer := http.New()
+	httpServer.AddGrpc("/api", grpcServer.GatewayMux)
+
+	s := &Storepoc{
+		Database:   db,
+		HttpServer: httpServer,
+		GrpcServer: grpcServer,
+		GrpcClient: grpcClient,
+		Ctx:        context.Background(),
+	}
+
+	if err = s.Boot(); err != nil {
+		return nil, err
+	}
+
 	return s, nil
 }
 
-func (s *Storepoc) Router() {
-	health.Register(s.Database, s.GrpcServer, s.GrpcClient)
-	store.Register(s.Database, s.GrpcServer, s.GrpcClient)
+func (s *Storepoc) Boot() error {
+	err := health.Register(s.Ctx, s.Database, s.GrpcServer, s.GrpcClient)
+	if err != nil {
+		return err
+	}
+
+	return store.Register(s.Ctx, s.Database, s.GrpcServer, s.GrpcClient)
 }
 
 func (s *Storepoc) Start() {
@@ -55,11 +75,19 @@ func (s *Storepoc) Start() {
 	s.Database.AutoMigrate(
 		&proto.Store{},
 	)
+
 	log.Println("Starting grpc server at", config.GrpcAddress())
-	s.GrpcServer.Start()
+	go s.GrpcServer.Start()
+
+	log.Println("Starting http server at", config.HttpAddress())
+	go s.HttpServer.Start()
+
+	<-s.quit
 }
 
 func (s *Storepoc) Stop() {
-	s.Database.Close()
 	s.GrpcServer.Close()
+	s.HttpServer.Close()
+	s.Database.Close()
+	s.quit <- struct{}{}
 }

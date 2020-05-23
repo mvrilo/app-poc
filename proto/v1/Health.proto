@@ -5,11 +5,16 @@ package health.v1;
 option go_package = ".;proto";
 
 import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
 
 message Health {
   bool alive = 1;
 }
 
 service HealthService {
-  rpc Check (google.protobuf.Empty) returns (Health) {};
+  rpc Check (google.protobuf.Empty) returns (Health) {
+    option (google.api.http) = {
+      get: "/v1/health";
+    };
+  };
 }
