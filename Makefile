@@ -37,7 +37,7 @@ bench:
 
 deps:
 	( cd /tmp; \
-		go get \
+		go get -v \
 			github.com/golang/protobuf/protoc-gen-go \
 			google.golang.org/grpc \
 			github.com/favadi/protoc-go-inject-tag \
