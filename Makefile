@@ -65,6 +65,7 @@ prepare-docs:
 docs-md:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
+		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--doc_out=./docs \
 		--doc_opt=html,index.html \
 		$(PROTO_DIR)/v1/*.proto
@@ -72,6 +73,7 @@ docs-md:
 docs-html:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
+		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--doc_out=./docs \
 		--doc_opt=markdown,readme.md \
 		$(PROTO_DIR)/v1/*.proto
