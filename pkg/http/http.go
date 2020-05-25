@@ -17,7 +17,7 @@ type Server struct {
 	Router *gin.Engine
 }
 
-func New() *Server {
+func NewServer() *Server {
 	router := gin.New()
 	router.Use(ginzap.Ginzap(logger.Logger, time.RFC3339, true))
 
@@ -34,7 +34,7 @@ func New() *Server {
 	return s
 }
 
-func (s *Server) AddGrpc(grpcPathPrefix string, grpcHandler http.Handler) {
+func (s *Server) AddGrpcGateway(grpcPathPrefix string, grpcHandler http.Handler) {
 	s.Router.Any(grpcPathPrefix+"/*any", gin.WrapF(func(w http.ResponseWriter, r *http.Request) {
 		r.URL.Path = strings.Replace(r.URL.Path, grpcPathPrefix, "", -1)
 		grpcHandler.ServeHTTP(w, r)

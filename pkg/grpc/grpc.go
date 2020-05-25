@@ -86,9 +86,8 @@ func NewServer() (*Server, error) {
 	)
 
 	reflection.Register(grpcServer)
-	mux := runtime.NewServeMux()
 	return &Server{
-		GatewayMux: mux,
+		GatewayMux: runtime.NewServeMux(),
 		Listener:   listener,
 		Server:     grpcServer,
 	}, nil
