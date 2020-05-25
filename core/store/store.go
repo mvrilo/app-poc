@@ -9,20 +9,14 @@ import (
 )
 
 type Store struct {
-	*Repository
 	*Service
 }
 
-func New(db *database.Database) *Store {
+func (s *Store) Register(ctx context.Context, db *database.Database, gs *grpc.Server, gc *grpc.Client) error {
 	repo := &Repository{db}
-	service := &Service{repo}
-	return &Store{repo, service}
-}
+	s.Service = &Service{repo}
 
-// Register reisters a grpc client and server routes
-func Register(ctx context.Context, db *database.Database, gs *grpc.Server, gc grpc.ClientConnInterface) error {
-	service := New(db).Service
-	proto.RegisterStoreServiceServer(gs.Server, service)
+	proto.RegisterStoreServiceServer(gs.Server, s.Service)
 	proto.NewStoreServiceClient(gc)
 
 	return proto.RegisterStoreServiceHandlerFromEndpoint(

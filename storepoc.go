@@ -27,6 +27,10 @@ type Storepoc struct {
 	quit chan struct{}
 }
 
+type RegisterableService interface {
+	Register(context.Context, *database.Database, *grpc.Server, *grpc.Client) error
+}
+
 func New() (*Storepoc, error) {
 	db, err := database.New()
 	if err != nil {
@@ -43,8 +47,8 @@ func New() (*Storepoc, error) {
 		return nil, err
 	}
 
-	httpServer := http.New()
-	httpServer.AddGrpc("/api", grpcServer.GatewayMux)
+	httpServer := http.NewServer()
+	httpServer.AddGrpcGateway("/api", grpcServer.GatewayMux)
 
 	s := &Storepoc{
 		Database:   db,
@@ -54,20 +58,22 @@ func New() (*Storepoc, error) {
 		Ctx:        context.Background(),
 	}
 
-	if err = s.Boot(); err != nil {
-		return nil, err
-	}
+	err = s.Load(
+		&health.Health{},
+		&store.Store{},
+	)
 
-	return s, nil
+	return s, err
 }
 
-func (s *Storepoc) Boot() error {
-	err := health.Register(s.Ctx, s.Database, s.GrpcServer, s.GrpcClient)
-	if err != nil {
-		return err
+func (s *Storepoc) Load(services ...RegisterableService) error {
+	for _, service := range services {
+		err := service.Register(s.Ctx, s.Database, s.GrpcServer, s.GrpcClient)
+		if err != nil {
+			return err
+		}
 	}
-
-	return store.Register(s.Ctx, s.Database, s.GrpcServer, s.GrpcClient)
+	return nil
 }
 
 func (s *Storepoc) Start() {
