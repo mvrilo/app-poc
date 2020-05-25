@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = ".;proto";
+
+import "protoc-gen-swagger/options/annotations.proto";
+
+package swagger.v1;
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "storepoc service"
+    version: "1.0.0"
+    contact: {
+      name: "Murilo S."
+      url: "https://x/"
+      email: "mvrilo@gmail.com"
+    };
+  };
+  schemes: [HTTP,HTTPS]
+  consumes: "application/json"
+  produces: "application/json"
+  responses: {
+    key: "404"
+    value: {
+      description: "Returned when the resource does not exist."
+      schema: {
+        json_schema: {
+          type: STRING
+        };
+      };
+    };
+  };
+};

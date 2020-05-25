@@ -84,10 +84,11 @@ proto: proto-v1
 proto-gen-v1:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
+		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--go_out=plugins=grpc:$(PROTO_DIR)/v1 \
 		--grpc-gateway_out=logtostderr=true:$(PROTO_DIR)/v1 \
-		--swagger_out=logtostderr=true:docs \
+		--swagger_out=logtostderr=true,allow_merge=true,merge_file_name=api:docs \
 		$(PROTO_DIR)/v1/*.proto
 
 proto-v1: proto-gen-v1
