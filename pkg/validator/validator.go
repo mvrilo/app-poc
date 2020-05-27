@@ -7,6 +7,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	en_translations "github.com/go-playground/validator/v10/translations/en"
+	"github.com/mvrilo/storepoc/pkg/grpc"
 )
 
 var (
@@ -30,4 +31,11 @@ func Validate(data interface{}) (err error) {
 		}
 	}
 	return
+}
+
+func ValidateGrpc(data interface{}) error {
+	if err := Validate(data); err != nil {
+		return grpc.Invalid(err)
+	}
+	return nil
 }
