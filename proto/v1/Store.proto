@@ -13,7 +13,6 @@ enum Status {
 }
 
 message Store {
-  // @exclude @inject_tag: gorm:"type:uuid;primary_key"
   string id = 1;
   string name = 2;
   string uri = 3;
@@ -28,27 +27,26 @@ message Stores {
 
 message FindRequest {
   string id = 1;
-  string name = 2;
 }
 
 message CreateRequest {
-  // @exclude @inject_tag: validate:"required"
+  // Request name
   string name = 1;
-  // @exclude @inject_tag: validate:"required,uri"
+
+  // Request URI
   string uri = 2;
 }
 
 message ChangeStatusRequest {
-  // @exclude @inject_tag: validate:"required,uuid"
+  /// id of the store
   string id = 1;
-  // @exclude @inject_tag: validate:"required"
+
+  // status to be changed
   Status status = 2;
 }
 
 message ListRequest {
-  // @exclude @inject_tag: validate:"required"
   string name = 1;
-  // @exclude @inject_tag: validate:"required"
   Status status = 2;
 }
 

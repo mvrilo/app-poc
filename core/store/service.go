@@ -3,7 +3,6 @@ package store
 import (
 	"context"
 
-	"github.com/mvrilo/storepoc/pkg/grpc/validator"
 	"github.com/mvrilo/storepoc/proto/v1"
 )
 
@@ -16,11 +15,6 @@ func (s *Service) Find(ctx context.Context, in *proto.FindRequest) (*proto.Store
 }
 
 func (s *Service) Create(ctx context.Context, in *proto.CreateRequest) (*proto.Store, error) {
-
-	if err := validator.Validate(in); err != nil {
-		return nil, err
-	}
-
 	return s.repo.Create(in)
 }
 

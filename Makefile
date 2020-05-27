@@ -12,7 +12,7 @@ build-run: storepoc
 	./storepoc
 
 clean:
-	rm -rf docs proto/**/*.go 2>/dev/null
+	rm -rf docs/* proto/**/*.go 2>/dev/null
 
 cli.health:
 	grpcurl -plaintext $(GRPC_ADDRESS) health.v1.HealthService.Check
@@ -27,7 +27,7 @@ cli.find:
 	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
 
 cli.create:
-	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
+	grpcurl -plaintext -d '{ "name": "" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
 
 sqlite:
 	sqlite3 $(DATABASE_URI) -header -column -echo 'select * from stores;'
@@ -53,18 +53,16 @@ build: proto docs
 test: proto
 	go test core/**/*
 
-run: proto
+run: proto docs
 	go run cmd/storepoc/main.go
 
-docs: prepare-docs docs-md docs-html
-
 prepare-docs:
-	rm -rf docs 2>/dev/null; \
-		mkdir docs
+	rm -rf docs/* &>/dev/null
 
 docs-md:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
+		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--doc_out=./docs \
 		--doc_opt=html,index.html \
@@ -73,15 +71,15 @@ docs-md:
 docs-html:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
+		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--doc_out=./docs \
 		--doc_opt=markdown,readme.md \
 		$(PROTO_DIR)/v1/*.proto
 
-.PHONY: proto
-proto: proto-v1
+docs: prepare-docs docs-md docs-html
 
-proto-gen-v1:
+proto-v1:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway \
@@ -91,7 +89,5 @@ proto-gen-v1:
 		--swagger_out=logtostderr=true,allow_merge=true,merge_file_name=api:docs \
 		$(PROTO_DIR)/v1/*.proto
 
-proto-v1: proto-gen-v1
-	for file in proto/v1/*.pb.go; do \
-		protoc-go-inject-tag -input=$$file; \
-	done
+.PHONY: proto
+proto: proto-v1

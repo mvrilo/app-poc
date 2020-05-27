@@ -20,6 +20,7 @@
   
     - [StoreService](#store.v1.StoreService)
   
+- [Swagger.proto](#Swagger.proto)
 - [Scalar Value Types](#scalar-value-types)
 
 
@@ -80,8 +81,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  |  |
-| status | [Status](#store.v1.Status) |  |  |
+| id | [string](#string) |  | id of the store |
+| status | [Status](#store.v1.Status) |  | status to be changed |
 
 
 
@@ -96,8 +97,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  |  |
-| uri | [string](#string) |  |  |
+| name | [string](#string) |  | Request name |
+| uri | [string](#string) |  | Request URI |
 
 
 
@@ -113,7 +114,6 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | [string](#string) |  |  |
-| name | [string](#string) |  |  |
 
 
 
@@ -200,6 +200,22 @@
 | List | [ListRequest](#store.v1.ListRequest) | [Stores](#store.v1.Stores) |  |
 | Create | [CreateRequest](#store.v1.CreateRequest) | [Store](#store.v1.Store) |  |
 | ChangeStatus | [ChangeStatusRequest](#store.v1.ChangeStatusRequest) | [Store](#store.v1.Store) |  |
+
+ 
+
+
+
+<a name="Swagger.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## Swagger.proto
+
+
+ 
+
+ 
+
+ 
 
  
 
