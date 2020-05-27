@@ -10,14 +10,18 @@ import (
 
 type Health struct {
 	*Service
+	Client proto.HealthServiceClient
 }
 
-func (h *Health) Register(ctx context.Context, db *database.Database, gs *grpc.Server, gc *grpc.Client) error {
+func New(gc *grpc.Client) *Health {
+	return &Health{
+		Client: proto.NewHealthServiceClient(gc),
+	}
+}
+
+func (h *Health) Register(ctx context.Context, db *database.Database, gs *grpc.Server) error {
 	h.Service = &Service{}
-
-	proto.NewHealthServiceClient(gc)
 	proto.RegisterHealthServiceServer(gs.Server, h.Service)
-
 	return proto.RegisterHealthServiceHandlerFromEndpoint(
 		ctx,
 		gs.GatewayMux,

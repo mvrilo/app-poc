@@ -8,36 +8,24 @@ import (
 	"github.com/mvrilo/storepoc/pkg/database"
 	"github.com/mvrilo/storepoc/pkg/grpc"
 	"github.com/mvrilo/storepoc/pkg/http"
-
-	"github.com/mvrilo/storepoc/core/health"
-	"github.com/mvrilo/storepoc/core/store"
-
-	"github.com/mvrilo/storepoc/proto/v1"
 )
 
-type Storepoc struct {
-	*database.Database
+type Server struct {
+	Ctx context.Context
 
+	Database   *database.Database
 	HttpServer *http.Server
 	GrpcServer *grpc.Server
-	GrpcClient *grpc.Client
-
-	Ctx context.Context
 
 	quit chan struct{}
 }
 
 type RegisterableService interface {
-	Register(context.Context, *database.Database, *grpc.Server, *grpc.Client) error
+	Register(context.Context, *database.Database, *grpc.Server) error
 }
 
-func New() (*Storepoc, error) {
+func New() (*Server, error) {
 	db, err := database.New()
-	if err != nil {
-		return nil, err
-	}
-
-	grpcClient, err := grpc.NewClient()
 	if err != nil {
 		return nil, err
 	}
@@ -50,25 +38,19 @@ func New() (*Storepoc, error) {
 	httpServer := http.NewServer()
 	httpServer.AddGrpcGateway("/api", grpcServer.GatewayMux)
 
-	s := &Storepoc{
+	s := &Server{
 		Database:   db,
 		HttpServer: httpServer,
 		GrpcServer: grpcServer,
-		GrpcClient: grpcClient,
 		Ctx:        context.Background(),
 	}
-
-	err = s.Load(
-		&health.Health{},
-		&store.Store{},
-	)
 
 	return s, err
 }
 
-func (s *Storepoc) Load(services ...RegisterableService) error {
+func (s *Server) Load(services ...RegisterableService) error {
 	for _, service := range services {
-		err := service.Register(s.Ctx, s.Database, s.GrpcServer, s.GrpcClient)
+		err := service.Register(s.Ctx, s.Database, s.GrpcServer)
 		if err != nil {
 			return err
 		}
@@ -76,11 +58,8 @@ func (s *Storepoc) Load(services ...RegisterableService) error {
 	return nil
 }
 
-func (s *Storepoc) Start() {
+func (s *Server) Start() {
 	log.Println("Running migrations")
-	s.Database.AutoMigrate(
-		&proto.Store{},
-	)
 
 	log.Println("Starting grpc server at", config.GrpcAddress())
 	go s.GrpcServer.Start()
@@ -91,7 +70,7 @@ func (s *Storepoc) Start() {
 	<-s.quit
 }
 
-func (s *Storepoc) Stop() {
+func (s *Server) Stop() {
 	s.GrpcServer.Close()
 	s.HttpServer.Close()
 	s.Database.Close()

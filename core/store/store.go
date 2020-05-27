@@ -10,15 +10,20 @@ import (
 
 type Store struct {
 	*Service
+	Client proto.StoreServiceClient
 }
 
-func (s *Store) Register(ctx context.Context, db *database.Database, gs *grpc.Server, gc *grpc.Client) error {
+func New(gc *grpc.Client) *Store {
+	return &Store{
+		Client: proto.NewStoreServiceClient(gc),
+	}
+}
+
+func (s *Store) Register(ctx context.Context, db *database.Database, gs *grpc.Server) error {
 	repo := &Repository{db}
 	s.Service = &Service{repo}
-
+	db.AutoMigrate(&proto.Store{})
 	proto.RegisterStoreServiceServer(gs.Server, s.Service)
-	proto.NewStoreServiceClient(gc)
-
 	return proto.RegisterStoreServiceHandlerFromEndpoint(
 		ctx,
 		gs.GatewayMux,
