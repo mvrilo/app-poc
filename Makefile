@@ -40,7 +40,6 @@ deps:
 		go get -v \
 			github.com/golang/protobuf/protoc-gen-go \
 			google.golang.org/grpc \
-			github.com/favadi/protoc-go-inject-tag \
 			github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway \
 			github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
 			github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc \
