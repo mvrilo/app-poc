@@ -55,9 +55,6 @@ test: proto
 run: proto docs
 	go run cmd/storepoc/main.go
 
-prepare-docs:
-	rm -rf docs/* &>/dev/null
-
 docs-md:
 	protoc \
 		-I=$(PROTO_DIR)/v1 \
@@ -76,7 +73,7 @@ docs-html:
 		--doc_opt=markdown,readme.md \
 		$(PROTO_DIR)/v1/*.proto
 
-docs: prepare-docs docs-md docs-html
+docs: docs-md docs-html
 
 proto-v1:
 	protoc \
