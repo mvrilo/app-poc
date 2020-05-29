@@ -47,13 +47,13 @@ deps:
 	)
 
 build: proto docs
-	govvv build -o storepoc cmd/storepoc/main.go
+	govvv build -o storepoc main.go
 
 test: proto
 	go test core/**/*
 
 run: proto docs
-	go run cmd/storepoc/main.go
+	go run main.go
 
 docs-md:
 	protoc \

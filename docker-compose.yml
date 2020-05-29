@@ -5,9 +5,4 @@ services:
     ports:
       - 7000
       - 8000
-    environment:
-      PROTO_DIR: proto
-      GRPC_ADDRESS: 127.0.0.1:7000
-      HTTP_ADDRESS: 127.0.0.1:8000
-      DATABASE_URI: /tmp/db.sqlite
-      DATABASE_ADAPTER: sqlite3
+    env_file: .env.sample

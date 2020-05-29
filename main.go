@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/mvrilo/storepoc"
 	"github.com/mvrilo/storepoc/core/health"
 	"github.com/mvrilo/storepoc/core/store"
+	"github.com/mvrilo/storepoc/pkg/server"
 
 	"github.com/urfave/cli/v2"
 )
@@ -16,7 +16,7 @@ func main() {
 		Name:  "storepoc",
 		Usage: "storepoc cli",
 		Action: func(c *cli.Context) error {
-			server, err := storepoc.New()
+			server, err := server.New()
 			if err != nil {
 				return err
 			}

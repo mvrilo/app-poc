@@ -1,4 +1,4 @@
-package storepoc
+package server
 
 import (
 	"context"
