@@ -17,17 +17,14 @@ clean:
 cli.health:
 	grpcurl -plaintext $(GRPC_ADDRESS) health.v1.HealthService.Check
 
-cli.echo:
-	grpcurl -plaintext $(GRPC_ADDRESS) store.v1.StoreService.Echo
-
 cli.list:
 	grpcurl -plaintext $(GRPC_ADDRESS) list
 
-cli.find:
+cli.create:
 	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
 
-cli.create:
-	grpcurl -plaintext -d '{ "name": "" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
+cli.find:
+	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Find
 
 sqlite:
 	sqlite3 $(DATABASE_URI) -header -column -echo 'select * from stores;'
