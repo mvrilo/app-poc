@@ -135,41 +135,6 @@
       }
     },
     "/v1/stores/{id}": {
-      "get": {
-        "operationId": "StoreService_Find",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1Store"
-            }
-          },
-          "404": {
-            "description": "Returned when the resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "StoreService"
-        ]
-      },
       "put": {
         "operationId": "StoreService_ChangeStatus",
         "responses": {
@@ -208,6 +173,43 @@
             "schema": {
               "$ref": "#/definitions/v1ChangeStatusRequest"
             }
+          }
+        ],
+        "tags": [
+          "StoreService"
+        ]
+      }
+    },
+    "/v1/stores/{name}": {
+      "get": {
+        "operationId": "StoreService_Find",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1Store"
+            }
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [

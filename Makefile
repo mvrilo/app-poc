@@ -12,19 +12,25 @@ build-run: storepoc
 	./storepoc
 
 clean:
-	rm -rf docs/* proto/**/*.go 2>/dev/null
-
-cli.health:
-	grpcurl -plaintext $(GRPC_ADDRESS) health.v1.HealthService.Check
+	rm -rf storepoc docs/* proto/**/*.go 2>/dev/null
 
 cli.list:
 	grpcurl -plaintext $(GRPC_ADDRESS) list
 
-cli.create:
+cli.healthcheck:
+	grpcurl -plaintext $(GRPC_ADDRESS) health.v1.HealthService.Check
+
+cli.create.fail:
 	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
 
-cli.find:
+cli.create.ok:
+	grpcurl -plaintext -d '{ "name": "test", "uri": "http://example.com/" }' $(GRPC_ADDRESS) store.v1.StoreService.Create
+
+cli.find.ok:
 	grpcurl -plaintext -d '{ "name": "test" }' $(GRPC_ADDRESS) store.v1.StoreService.Find
+
+cli.find.fail:
+	grpcurl -plaintext -d '{ "name": "not found" }' $(GRPC_ADDRESS) store.v1.StoreService.Find
 
 sqlite:
 	sqlite3 $(DATABASE_URI) -header -column -echo 'select * from stores;'
@@ -54,7 +60,7 @@ run: proto docs
 
 docs-md:
 	protoc \
-		-I=$(PROTO_DIR)/v1 \
+		-I$(PROTO_DIR)/v1 \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--doc_out=./docs \
@@ -63,7 +69,7 @@ docs-md:
 
 docs-html:
 	protoc \
-		-I=$(PROTO_DIR)/v1 \
+		-I$(PROTO_DIR)/v1 \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--doc_out=./docs \
@@ -74,7 +80,7 @@ docs: docs-md docs-html
 
 proto-v1:
 	protoc \
-		-I=$(PROTO_DIR)/v1 \
+		-I$(PROTO_DIR)/v1 \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway \
 		-I$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		--go_out=plugins=grpc:$(PROTO_DIR)/v1 \

@@ -13,19 +13,18 @@ type Repository struct {
 	db *database.Database
 }
 
-func (r *Repository) Find(params *proto.FindRequest) (store *proto.Store, err error) {
-	err = r.db.Find(structs.Map(params), &store).Error
-	return
+func (r *Repository) Find(params *proto.FindRequest) (*proto.Store, error) {
+	var store proto.Store
+	err := r.db.Where(structs.Map(params)).Find(&store).Error
+	return &store, err
 }
 
 func (r *Repository) Create(params *proto.CreateRequest) (*proto.Store, error) {
 	var store proto.Store
-	err := copier.Copy(&store, params)
-	if err != nil {
+	if err := copier.Copy(&store, params); err != nil {
 		return nil, err
 	}
-
-	err = r.db.Create(&store).Error
+	err := r.db.Create(&store).Error
 	return &store, err
 }
 
@@ -39,9 +38,13 @@ func (r *Repository) List(params *proto.ListRequest) (*proto.Stores, error) {
 	return &proto.Stores{Stores: stores}, err
 }
 
-func (r *Repository) ChangeStatus(params *proto.ChangeStatusRequest) (store *proto.Store, err error) {
+func (r *Repository) ChangeStatus(params *proto.ChangeStatusRequest) (*proto.Store, error) {
+	var store proto.Store
 	storeParams := structs.Map(params)
 	storeParams["updated_at"] = time.Now()
-	err = r.db.Model(&store).Updates(storeParams).Error
-	return
+	err := r.db.Model(&store).Updates(storeParams).Error
+	if err != nil {
+		return nil, err
+	}
+	return &store, nil
 }

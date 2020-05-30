@@ -113,7 +113,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  |  |
+| name | [string](#string) |  |  |
 
 
 

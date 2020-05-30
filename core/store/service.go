@@ -13,9 +13,9 @@ type Service struct {
 
 func (s *Service) Find(ctx context.Context, in *proto.FindRequest) (*proto.Store, error) {
 	data := struct {
-		Id string `validate:"required"`
+		Name string `validate:"required"`
 	}{
-		in.Id,
+		in.Name,
 	}
 
 	if err := validator.ValidateGrpc(data); err != nil {
