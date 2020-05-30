@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/mvrilo/storepoc/pkg/server"
 	"github.com/urfave/cli/v2"
 
@@ -36,7 +37,12 @@ func main() {
 		},
 	}
 
-	err := app.Run(os.Args)
+	err := godotenv.Load()
+	if err != nil {
+		log.Println(err)
+	}
+
+	err = app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}

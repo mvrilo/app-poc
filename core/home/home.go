@@ -17,7 +17,7 @@ func (h *Home) Register(s *server.Server) error {
 
 	// TODO: panic when using context methods
 	router.GET("/", func(c *gin.Context) {
-		c.Writer.Write([]byte("test home"))
+		c.Writer.Write([]byte("welcome to storepoc"))
 	})
 
 	return nil

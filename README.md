@@ -12,10 +12,10 @@ type RegisterableService interface {
 
 Our services are defined and loaded at the main entrypoint, before starting the server.
 
-For configuration, check `pkg/config`.
+For configuration it uses env vars, check `.env.sample` and `pkg/config`.
 
 
-## installing
+## Installing
 
 With Go:
 
@@ -23,7 +23,7 @@ With Go:
 go get github.com/mvrilo/storepoc
 ```
 
-Building, with go:
+Building, with Go:
 
 ```
 git clone github.com/mvrilo/storepoc
@@ -32,11 +32,17 @@ make deps
 make
 ```
 
-With docker-compose:
+Running with Go:
+
+```
+make run
+```
+
+Running with docker-compose:
 
 `docker-compose up`
 
 
-## author
+## Author
 
 Murilo Santana <<mvrilo@gmail.com>>
