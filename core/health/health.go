@@ -1,10 +1,8 @@
 package health
 
 import (
-	"context"
-
-	"github.com/mvrilo/storepoc/pkg/database"
 	"github.com/mvrilo/storepoc/pkg/grpc"
+	"github.com/mvrilo/storepoc/pkg/server"
 	"github.com/mvrilo/storepoc/proto/v1"
 )
 
@@ -19,11 +17,12 @@ func New(gc *grpc.Client) *Health {
 	}
 }
 
-func (h *Health) Register(ctx context.Context, db *database.Database, gs *grpc.Server) error {
+func (h *Health) Register(s *server.Server) error {
 	h.Service = &Service{}
+	gs := s.GrpcServer
 	proto.RegisterHealthServiceServer(gs.Server, h.Service)
 	return proto.RegisterHealthServiceHandlerFromEndpoint(
-		ctx,
+		s.Ctx,
 		gs.GatewayMux,
 		gs.GatewayAddr(),
 		gs.GatewayOpts(),

@@ -1,10 +1,8 @@
 package store
 
 import (
-	"context"
-
-	"github.com/mvrilo/storepoc/pkg/database"
 	"github.com/mvrilo/storepoc/pkg/grpc"
+	"github.com/mvrilo/storepoc/pkg/server"
 	"github.com/mvrilo/storepoc/proto/v1"
 )
 
@@ -19,13 +17,16 @@ func New(gc *grpc.Client) *Store {
 	}
 }
 
-func (s *Store) Register(ctx context.Context, db *database.Database, gs *grpc.Server) error {
+func (s *Store) Register(srv *server.Server) error {
+	db := srv.Database
 	repo := &Repository{db}
 	s.Service = &Service{repo}
 	db.AutoMigrate(&proto.Store{})
+
+	gs := srv.GrpcServer
 	proto.RegisterStoreServiceServer(gs.Server, s.Service)
 	return proto.RegisterStoreServiceHandlerFromEndpoint(
-		ctx,
+		srv.Ctx,
 		gs.GatewayMux,
 		gs.GatewayAddr(),
 		gs.GatewayOpts(),

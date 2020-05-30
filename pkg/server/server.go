@@ -21,7 +21,7 @@ type Server struct {
 }
 
 type RegisterableService interface {
-	Register(context.Context, *database.Database, *grpc.Server) error
+	Register(s *Server) error
 }
 
 func New() (*Server, error) {
@@ -50,7 +50,7 @@ func New() (*Server, error) {
 
 func (s *Server) Load(services ...RegisterableService) error {
 	for _, service := range services {
-		err := service.Register(s.Ctx, s.Database, s.GrpcServer)
+		err := service.Register(s)
 		if err != nil {
 			return err
 		}

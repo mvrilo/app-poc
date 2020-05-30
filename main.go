@@ -4,11 +4,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/mvrilo/storepoc/core/health"
-	"github.com/mvrilo/storepoc/core/store"
 	"github.com/mvrilo/storepoc/pkg/server"
-
 	"github.com/urfave/cli/v2"
+
+	"github.com/mvrilo/storepoc/core/health"
+	"github.com/mvrilo/storepoc/core/home"
+	"github.com/mvrilo/storepoc/core/store"
 )
 
 func main() {
@@ -22,6 +23,7 @@ func main() {
 			}
 
 			err = server.Load(
+				&home.Home{},
 				&health.Health{},
 				&store.Store{},
 			)
