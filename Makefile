@@ -32,6 +32,12 @@ cli.find.ok:
 cli.find.fail:
 	grpcurl -plaintext -d '{ "name": "not found" }' $(GRPC_ADDRESS) store.v1.StoreService.Find
 
+curl.list.ok:
+	curl -s $(HTTP_ADDRESS)/api/v1/stores
+
+curl.find.ok:
+	curl -s $(HTTP_ADDRESS)/api/v1/stores?name=test
+
 sqlite:
 	sqlite3 $(DATABASE_URI) -header -column -echo 'select * from stores;'
 
