@@ -4,10 +4,10 @@ import (
 	"context"
 	"log"
 
-	"github.com/mvrilo/storepoc/pkg/config"
-	"github.com/mvrilo/storepoc/pkg/database"
-	"github.com/mvrilo/storepoc/pkg/grpc"
-	"github.com/mvrilo/storepoc/pkg/http"
+	"github.com/mvrilo/app-poc/pkg/config"
+	"github.com/mvrilo/app-poc/pkg/database"
+	"github.com/mvrilo/app-poc/pkg/grpc"
+	"github.com/mvrilo/app-poc/pkg/http"
 )
 
 type Server struct {

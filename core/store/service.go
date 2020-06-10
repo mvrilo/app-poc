@@ -3,8 +3,8 @@ package store
 import (
 	"context"
 
-	"github.com/mvrilo/storepoc/pkg/validator"
-	"github.com/mvrilo/storepoc/proto/v1"
+	"github.com/mvrilo/app-poc/pkg/validator"
+	"github.com/mvrilo/app-poc/proto/v1"
 )
 
 type Service struct {

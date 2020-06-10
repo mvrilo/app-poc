@@ -6,13 +6,13 @@ DATABASE_ADAPTER := sqlite3
 
 export GRPC_ADDRESS HTTP_ADDRESS DATABASE_URI DATABASE_ADAPTER
 
-storepoc: build
+app-poc: build
 
-build-run: storepoc
-	./storepoc
+build-run: app-poc
+	./app-poc
 
 clean:
-	rm -rf storepoc docs/* proto/**/*.go 2>/dev/null
+	rm -rf app-poc docs/* proto/**/*.go 2>/dev/null
 
 cli.list:
 	grpcurl -plaintext $(GRPC_ADDRESS) list
@@ -56,7 +56,7 @@ deps:
 	)
 
 build: proto docs
-	govvv build -o storepoc main.go
+	govvv build -o app-poc main.go
 
 test: proto
 	go test core/**/*

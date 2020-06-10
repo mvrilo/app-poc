@@ -2,8 +2,8 @@ package home
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mvrilo/storepoc/pkg/grpc"
-	"github.com/mvrilo/storepoc/pkg/server"
+	"github.com/mvrilo/app-poc/pkg/grpc"
+	"github.com/mvrilo/app-poc/pkg/server"
 )
 
 type Home struct{}
@@ -17,7 +17,7 @@ func (h *Home) Register(s *server.Server) error {
 
 	// TODO: panic when using context methods
 	router.GET("/", func(c *gin.Context) {
-		c.Writer.Write([]byte("welcome to storepoc"))
+		c.Writer.Write([]byte("welcome to app-poc"))
 	})
 
 	return nil

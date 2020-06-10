@@ -1,6 +1,6 @@
-# storepoc
+# app-poc
 
-`storepoc` is a SOA project built with Go intended to serve as a PoC and boilerplate for future development. It's built around DDD with gorm, protobuf, grpc and rest (via grpc-gateway and gin). The entrypoint is located at the root of the project, the `main.go`.
+`app-poc` is a SOA project built with Go intended to serve as a PoC and boilerplate for future development. It's built around DDD with gorm, protobuf, grpc and rest (via grpc-gateway and gin). The entrypoint is located at the root of the project, the `main.go`.
 
 The business logic is located at the `core` directory. Each component of our server there, or _services_, must implement an interface for being loaded in the main server:
 
@@ -20,14 +20,14 @@ For configuration it uses env vars, check `.env.sample` and `pkg/config`.
 With Go:
 
 ```
-go get github.com/mvrilo/storepoc
+go get github.com/mvrilo/app-poc
 ```
 
 Building, with Go:
 
 ```
-git clone github.com/mvrilo/storepoc
-cd storepoce
+git clone github.com/mvrilo/app-poc
+cd app-poc
 make deps
 make
 ```

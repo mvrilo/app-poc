@@ -8,8 +8,8 @@ import (
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 
-	"github.com/mvrilo/storepoc/pkg/config"
-	"github.com/mvrilo/storepoc/pkg/logger"
+	"github.com/mvrilo/app-poc/pkg/config"
+	"github.com/mvrilo/app-poc/pkg/logger"
 )
 
 type Server struct {

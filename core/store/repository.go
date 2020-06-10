@@ -5,8 +5,8 @@ import (
 
 	"github.com/fatih/structs"
 	"github.com/jinzhu/copier"
-	"github.com/mvrilo/storepoc/pkg/database"
-	"github.com/mvrilo/storepoc/proto/v1"
+	"github.com/mvrilo/app-poc/pkg/database"
+	"github.com/mvrilo/app-poc/proto/v1"
 )
 
 type Repository struct {

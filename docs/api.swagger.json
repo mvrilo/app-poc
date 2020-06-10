@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "storepoc service",
+    "title": "app-poc service",
     "version": "1.0.0",
     "contact": {
       "name": "Murilo S.",

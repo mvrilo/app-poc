@@ -5,8 +5,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/mvrilo/storepoc/pkg/config"
-	"github.com/mvrilo/storepoc/pkg/logger"
+	"github.com/mvrilo/app-poc/pkg/config"
+	"github.com/mvrilo/app-poc/pkg/logger"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

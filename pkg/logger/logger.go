@@ -1,6 +1,6 @@
 package logger
 
-// import "github.com/mvrilo/storepoc/pkg/config"
+// import "github.com/mvrilo/app-poc/pkg/config"
 import "go.uber.org/zap"
 
 var Logger *zap.Logger = load()

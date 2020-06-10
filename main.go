@@ -5,18 +5,18 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/mvrilo/storepoc/pkg/server"
+	"github.com/mvrilo/app-poc/pkg/server"
 	"github.com/urfave/cli/v2"
 
-	"github.com/mvrilo/storepoc/core/health"
-	"github.com/mvrilo/storepoc/core/home"
-	"github.com/mvrilo/storepoc/core/store"
+	"github.com/mvrilo/app-poc/core/health"
+	"github.com/mvrilo/app-poc/core/home"
+	"github.com/mvrilo/app-poc/core/store"
 )
 
 func main() {
 	app := &cli.App{
-		Name:  "storepoc",
-		Usage: "storepoc cli",
+		Name:  "app-poc",
+		Usage: "app-poc cli",
 		Action: func(c *cli.Context) error {
 			server, err := server.New()
 			if err != nil {

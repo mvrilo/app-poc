@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/mvrilo/storepoc/pkg/config"
+	"github.com/mvrilo/app-poc/pkg/config"
 
 	// database adapters
 	_ "github.com/jinzhu/gorm/dialects/mysql"

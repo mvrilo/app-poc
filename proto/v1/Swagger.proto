@@ -8,7 +8,7 @@ package swagger.v1;
 
 option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
   info: {
-    title: "storepoc service"
+    title: "app-poc service"
     version: "1.0.0"
     contact: {
       name: "Murilo S."

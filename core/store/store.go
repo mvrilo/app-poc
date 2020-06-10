@@ -1,9 +1,9 @@
 package store
 
 import (
-	"github.com/mvrilo/storepoc/pkg/grpc"
-	"github.com/mvrilo/storepoc/pkg/server"
-	"github.com/mvrilo/storepoc/proto/v1"
+	"github.com/mvrilo/app-poc/pkg/grpc"
+	"github.com/mvrilo/app-poc/pkg/server"
+	"github.com/mvrilo/app-poc/proto/v1"
 )
 
 type Store struct {
